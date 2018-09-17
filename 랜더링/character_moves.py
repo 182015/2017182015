@@ -12,8 +12,8 @@ while (x < 800):
 	character.draw(x, 90)
 	update_canvas()
 	x = x + 2
+	update_canvas()
 	delay(0.01)
+	get_events()
 
-# fill here
-    
 close_canvas()
