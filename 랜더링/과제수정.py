@@ -1,5 +1,6 @@
 from pico2d import *
 import random
+speed = 3
 
 class Grass:
 	def __init__(self):
@@ -8,22 +9,20 @@ class Grass:
 	def draw(self):
 		self.image.draw(400, 300)
 
+
 class Boy:
 	def __init__(self):
 		print("Creating..")
 		self.x = random.randint(0, 200)
 		self.y = random.randint(90, 550)
-		self.speed = random.uniform(1.0, 3.0)
 		self.frame = random.randint(0, 7)
 		self.image = load_image('run_animation.png')
 	def draw(self):
 		self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
 	def update(self):
 		self.frame = (self.frame + 1) % 8
-		self.x += self.speed
+		self.x += speed
 		
-speed = 3
-
 def handle_events():
     global running
     global waypoints
@@ -43,31 +42,35 @@ def handle_events():
 
 open_canvas()
 
-g = Grass()
-boys = [ Boy() for i in range(20) ]
 wp = load_image('wp.png')
 
 x, y = 800 // 2, 90
 # tx, ty = x, y
 waypoints = []
+
+g = Grass()
+boys = [ Boy() for i in range(20) ]
+
+
 frame = 0
 running = True
 while running:
-    for 
-        clear_canvas()
-	g.draw()
-	for b in boys:
-		b.draw()
-
- 
+    handle_events()
+    for b in boys:
+	    b.update()
+	    
+    clear_canvas()
+    g.draw()
+    for b in boys:
+        b.draw()
     for loc in waypoints:
         wp.draw(loc[0], loc[1])
-   
+        
     update_canvas()
-    handle_events()
+    
     if len(waypoints) > 0:
         (tx, ty) = waypoints[0]
-        dx, dy = tx - x, ty - y
+        dx, dy = tx - b.x, ty - b.y
         dist = math.sqrt(dx ** 2 + dy ** 2)
         if dist > 0:
             x += speed * dx / dist
@@ -83,8 +86,8 @@ while running:
             # hide_cursor()
         # else:
         #     show_cursor()
-    frame = (frame + 1) % 8
-    delay(0.01)
+    
+    delay(0.03)
 
 # fill here
     
