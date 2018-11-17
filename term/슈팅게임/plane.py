@@ -52,6 +52,7 @@ class IdleState:
     def do(plane):
         #plane.frame = (plane.frame +1 )% 8
         #plane.timer -= 1
+        plane.frame = (plane.frame + 1) % 5
         plane.y += plane.ydir
         plane.x += plane.xdir
         if(plane.y>550):
@@ -66,7 +67,7 @@ class IdleState:
     
     @staticmethod
     def draw(plane):
-        plane.image.draw(plane.x, plane.y)
+        plane.image.clip_draw(plane.frame * 100, 0, 100, 100, plane.x, plane.y)
 
         
 # fill here
@@ -101,6 +102,7 @@ class RunState:
         #plane.timer -= 1
         #plane.x += plane.velocity
         #plane.x = clamp(25, plane.x, 800 - 25)
+        plane.frame = (plane.frame + 1) % 5
         plane.y += plane.ydir
         plane.x += plane.xdir
         if(plane.y>550):
@@ -115,7 +117,7 @@ class RunState:
     
     @staticmethod
     def draw(plane):
-        plane.image.draw(plane.x, plane.y)
+        plane.image.clip_draw(plane.frame * 100, 0, 100, 100, plane.x, plane.y)
 
 
 next_state_table = {
@@ -134,11 +136,12 @@ class Plane:
 
     def __init__(self):
         self.x, self.y = 100, 300
-        self.image = load_image('plane.png')
+        self.image = load_image('plane_animation.png')
         self.ydir = 0
         self.xdir = 0
         self.frame = 0
         self. timer =0
+        self.frame=0
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
