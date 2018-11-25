@@ -41,7 +41,9 @@ class IdleState:
         elif event == LEFT_UP:
             plane.xdir = 0
         elif event == Z:
-            pass
+            plane.bullet_x = plane.x + 50
+            plane.bullet_y = plane.y + 8
+            plane.bullet_xy.append([plane.bullet_x,plane.bullet_y])
             
 
             
@@ -68,10 +70,24 @@ class IdleState:
         elif(plane.x<50):
             plane.x = 50
 
+        if len(plane.bullet_xy)!= 0:
+            for i, bxy in enumerate(plane.bullet_xy):
+                bxy[0]+= 5
+                plane.bullet_xy[i][0] = bxy[0]
+                if bxy[0] >= 800:
+                    plane.bullet_xy.remove(bxy)
+
+        
+                
+
     
     @staticmethod
     def draw(plane):
         plane.image.clip_draw(plane.frame * 100, 0, 100, 100, plane.x, plane.y)
+
+        if len(plane.bullet_xy) != 0:
+            for bx, by in plane.bullet_xy:
+                plane.bullet.draw(bx,by)
 
         
 # fill here
@@ -94,6 +110,10 @@ class RunState:
             plane.xdir = 0
         elif event == LEFT_UP:
             plane.xdir = 0
+        elif event == Z:
+            plane.bullet_x = plane.x + 50
+            plane.bullet_y = plane.y +8
+            plane.bullet_xy.append([plane.bullet_x,plane.bullet_y])
         #plane.dir = plane.velocity
 
     @staticmethod
@@ -118,15 +138,25 @@ class RunState:
         elif(plane.x<50):
             plane.x = 50
 
+        if len(plane.bullet_xy)!= 0:
+            for i, bxy in enumerate(plane.bullet_xy):
+                bxy[0]+= 5
+                plane.bullet_xy[i][0] = bxy[0]
+                if bxy[0] >= 800:
+                    plane.bullet_xy.remove(bxy)
+
     
     @staticmethod
     def draw(plane):
         plane.image.clip_draw(plane.frame * 100, 0, 100, 100, plane.x, plane.y)
+        if len(plane.bullet_xy) != 0:
+            for bx, by in plane.bullet_xy:
+                plane.bullet.draw(bx,by)
 
 
 next_state_table = {
-    IdleState: {UP_UP: RunState, DOWN_UP: RunState, UP_DOWN: RunState, DOWN_DOWN: RunState,RIGHT_DOWN:RunState, LEFT_DOWN:RunState, RIGHT_UP:RunState,LEFT_UP:RunState},
-    RunState: {UP_UP: IdleState, DOWN_UP: IdleState, UP_DOWN: IdleState, DOWN_DOWN: IdleState,RIGHT_DOWN:IdleState, LEFT_DOWN:IdleState, RIGHT_UP:IdleState,LEFT_UP:IdleState}
+    IdleState: {UP_UP: RunState, DOWN_UP: RunState, UP_DOWN: RunState, DOWN_DOWN: RunState,RIGHT_DOWN:RunState, LEFT_DOWN:RunState, RIGHT_UP:RunState,LEFT_UP:RunState, Z :RunState},
+    RunState: {UP_UP: IdleState, DOWN_UP: IdleState, UP_DOWN: IdleState, DOWN_DOWN: IdleState,RIGHT_DOWN:IdleState, LEFT_DOWN:IdleState, RIGHT_UP:IdleState,LEFT_UP:IdleState, Z:IdleState}
 
 }
 
