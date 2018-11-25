@@ -2,7 +2,7 @@ from pico2d import *
 
 
 # Boy Event
-UP_DOWN, DOWN_DOWN, UP_UP, DOWN_UP,RIGHT_DOWN, LEFT_DOWN, RIGHT_UP,LEFT_UP = range(8)
+UP_DOWN, DOWN_DOWN, UP_UP, DOWN_UP,RIGHT_DOWN, LEFT_DOWN, RIGHT_UP,LEFT_UP, Z = range(9)
 
 # fill here
 
@@ -14,7 +14,8 @@ key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
     (SDL_KEYDOWN, SDLK_LEFT): LEFT_DOWN,
     (SDL_KEYUP, SDLK_RIGHT): RIGHT_UP,
-    (SDL_KEYUP, SDLK_LEFT): LEFT_UP
+    (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
+    (SDL_KEYDOWN, SDLK_z):Z
 }
 
 
@@ -39,6 +40,9 @@ class IdleState:
             plane.xdir = 0
         elif event == LEFT_UP:
             plane.xdir = 0
+        elif event == Z:
+            pass
+            
 
             
             
@@ -137,12 +141,16 @@ class Plane:
     def __init__(self):
         self.x, self.y = 100, 300
         self.image = load_image('plane_animation.png')
+        self.bullet = load_image('bullet.png')
         self.ydir = 0
         self.xdir = 0
         self.frame = 0
         self. timer =0
         self.frame=0
         self.event_que = []
+        self.bullet_xy = []
+        self.bullet_x = 0
+        self.bullet_y = 0
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
         # fill here

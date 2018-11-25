@@ -9,7 +9,7 @@ import title_state
 
 from plane import Plane
 from grass import Grass
-
+from enemy import Enemy
 
 
 name = "MainState"
@@ -17,19 +17,21 @@ name = "MainState"
 plane = None
 grass = None
 font = None
-
+enemy = None
 
 
 def enter():
-    global plane, grass
+    global plane, grass, enemy
     plane = Plane()
     grass = Grass()
+    enemy = Enemy()
 
 
 def exit():
-    global plane, grass
+    global plane, grass, enemy
     del plane
     del grass
+    del enemy
 
 
 
@@ -55,11 +57,13 @@ def handle_events():
 
 def update():
     plane.update()
+    enemy.update()
 
 def draw():
     clear_canvas()
     grass.draw()
     plane.draw()
+    enemy.draw()
     update_canvas()
 
 
